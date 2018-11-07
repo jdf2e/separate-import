@@ -1,7 +1,7 @@
 {
   "name": "@nutui/separate-import",
   "version": "0.1.0",
-  "description": "",
+  "description": "按需引入Nutui2.0组件，减小打包体积",
   "main": "index.js",
   "author": "famanoder",
   "repository": {
