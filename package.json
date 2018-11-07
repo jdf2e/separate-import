@@ -6,7 +6,7 @@
   "author": "famanoder",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/famanoder/DrawPageStructure.git"
+    "url": "https://github.com/jdf2e/separate-import.git"
   },
   "license": "MIT",
   "dependencies": {
