@@ -1,4 +1,4 @@
-### @nutui/separate-import
+### @nutui/babel-plugin-separate-import
 
 ---
 
@@ -9,7 +9,7 @@
 ---
 
 ```bash
-npm i -D @nutui/separate-import
+npm i -D @nutui/babel-plugin-separate-import
 ```
 
 ### 使用
@@ -21,8 +21,8 @@ npm i -D @nutui/separate-import
 ```js
 {
   "plugins": [
-    ["@nutui/separate-import", {
-        "libraryName": "@nutui/nutui",
+    ["@nutui/babel-plugin-separate-import", {
+        "libraryName": "@nutui/nutui2",
         "libraryDirectory": "dist/src/packages",
         "style": "css"
     }]
@@ -35,10 +35,10 @@ npm i -D @nutui/separate-import
 
 ```js
 import Vue from 'vue';
-import { Button, Icon } from '@nutui/nutui';
+import { Button, Icon } from '@nutui/nutui2';
 
-Vue.use(Button);
-Vue.use(Icon);
+Vue.component(Button.name, Button);
+Vue.component(Icon.name, Icon);
 ```
 
 ### AST转换
@@ -46,11 +46,11 @@ Vue.use(Icon);
 ---
 
 ```js
-import { Button } from '@nutui/nutui';
+import { Button } from '@nutui/nutui2';
 ```
 当使用这种方式`import`组件时，将会被转换为：
 ```js
-import Button from '@nutui/nutui/dist/src/packages/button/button.js';
+import Button from '@nutui/nutui/dist/src/packages/button/button.vue';
 import '@nutui/nutui/dist/src/packages/button/button.css';
 ```
 
