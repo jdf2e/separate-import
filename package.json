@@ -1,7 +1,7 @@
 {
-  "name": "@nutui/separate-import",
+  "name": "@nutui/babel-plugin-separate-import",
   "version": "0.1.0",
-  "description": "按需引入Nutui2.0组件，减小打包体积",
+  "description": "separate-import",
   "main": "index.js",
   "author": "famanoder",
   "repository": {
@@ -11,5 +11,10 @@
   "license": "MIT",
   "dependencies": {
     "babel-types": "^6.26.0"
-  }
+  },
+  "keywords": [
+    "jdcfe",
+    "nutui",
+    "import"   
+  ]
 }
