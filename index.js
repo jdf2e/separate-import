@@ -42,8 +42,12 @@ module.exports = function({types: t}) {
                 const {value} = node.source;
                 const {specifiers} = node;
                 if(value === opts.libraryName && specifiers && specifiers.length) {
-                    const spes = specifiers.map(specifier => specifier.local.name);
-                    path.replaceWithMultiple(genImportDeclaration(spes, opts))
+                    const spes = specifiers.filter(specifier => specifier.type === 'ImportSpecifier').map(specifier => specifier.local.name);
+                    console.log('\n\n\n\n\n,',spes)
+                    if(spes.length) {
+                        console.log(spes)
+                        path.replaceWithMultiple(genImportDeclaration(spes, opts))
+                    }
                 }
             }
         }
