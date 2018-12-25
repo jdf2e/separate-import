@@ -2,7 +2,7 @@ const {join} = require('path');
 const t = require('babel-types');
 
 const isLocaleExtra = curr => ~['locale', 'i18n'].indexOf(curr);
-const isExportFuncExtra = curr => ~['dialog', 'toast'].indexOf(curr);
+const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex'].indexOf(curr);
 
 function genImportDeclaration(specifiers = [], opts) {
     const packagesPath = `${opts.libraryName}/${opts.libraryDirectory}/`;
@@ -27,7 +27,7 @@ function genImportDeclaration(specifiers = [], opts) {
     }, []);
 }
 
-module.exports = function({types: t}) {
+module.exports = function() {
 
     return {
         visitor: {
@@ -44,7 +44,6 @@ module.exports = function({types: t}) {
                 if(value === opts.libraryName && specifiers && specifiers.length) {
                     const spes = specifiers.filter(specifier => specifier.type === 'ImportSpecifier').map(specifier => specifier.local.name);
                     if(spes.length) {
-                        console.log(spes)
                         path.replaceWithMultiple(genImportDeclaration(spes, opts))
                     }
                 }
@@ -53,8 +52,3 @@ module.exports = function({types: t}) {
     }
 }
 
-/**
- * 让用户指定按需加载css还是scss并不重要，可以不支持
- * 如果用户还可以指定按需加载css还是scss的话，当指向 index.js 时，其中的 import './*.scss'，如果不删除会造成重复加载scss的问题，需要ast删除，并且存在webpack版本问题
- * 指向.vue的话，用户可以指定按需加载css还是scss，但是dialog和toast需单独处理，该方式改动最小，只需加一个中间性质的js导出，index.js再导出
- *  */
