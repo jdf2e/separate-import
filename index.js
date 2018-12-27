@@ -2,7 +2,7 @@ const {join} = require('path');
 const t = require('babel-types');
 
 const isLocaleExtra = curr => ~['locale', 'i18n'].indexOf(curr);
-const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex', 'steps'].indexOf(curr);
+const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex', 'steps', 'skeleton'].indexOf(curr);
 
 /**
  * 生成新的specifiers
@@ -11,26 +11,43 @@ const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex', 'steps'].indexOf(
  * @returns {array}
  */
 function genImportDeclaration(specifiers = [], opts) {
-    const packagesPath = `${opts.libraryName}/dist/packages/`;
+    const packagesPath = `@nutui/nutui/dist/packages/`;
     return specifiers.reduce(function(newSpecifiers, curr) {
-        const isLocale = isLocaleExtra(curr);
-        const isExportFunc = isExportFuncExtra(curr);
-        const target = `${packagesPath + curr}/${curr}`;
-        const localePath = join(packagesPath, '..', 'locale');
-        const {style} = opts;
+        const _curr = curr.toLowerCase();
+        const isLocale = isLocaleExtra(_curr);
+        const {style, sourceCode} = opts;
         const importLocal = t.identifier(curr);
         const importDefault = t.importDefaultSpecifier(importLocal);
         const imported = t.importSpecifier(importLocal, importLocal);
         const imports = [
             t.importDeclaration([
                 isLocale? imported: importDefault
-            ], t.stringLiteral(isLocale? localePath: isExportFunc? `${packagesPath}/${curr}/_${curr}.js`: `${target.toLowerCase()}.vue`))
+            ], t.stringLiteral(getTarget(_curr, packagesPath, sourceCode)))
         ]
         if(style && !isLocale) {
-            imports.push(t.importDeclaration([], t.stringLiteral(`${target.toLowerCase()}.${style}`)))
+            const cssTarget = `${packagesPath + _curr}/${_curr}`;
+            imports.push(t.importDeclaration([], t.stringLiteral(`${cssTarget}.${style}`)))
         }
         return newSpecifiers.concat(imports);
     }, []);
+}
+
+/**
+ * 根据参数改变引用文件类型
+ */
+function getTarget(pkgName, pkgPath, isSourceCode) {
+    let target = pkgPath;
+    if(isSourceCode) {
+        const isLocale = isLocaleExtra(pkgName);
+        const isExportFunc = isExportFuncExtra(pkgName);
+        const localePath = join(pkgPath, '..', 'locales');
+        const exportFuncTarget = `${pkgPath}/${pkgName}/_${pkgName}.js`; 
+        const sourceFile = `${pkgPath + pkgName}/${pkgName}.vue`;
+        target = isLocale? localePath: isExportFunc? exportFuncTarget: sourceFile;
+    }else{
+        target = `${target + pkgName}/${pkgName}.js`;
+    }
+    return target;
 }
 
 module.exports = function() {
@@ -38,10 +55,10 @@ module.exports = function() {
     return {
         visitor: {
             ImportDeclaration(path, {opts = {}}) {
-                if(!opts.libraryName) opts.libraryName = '@nutui/nutui2';
+                if(!opts.libraryName) opts.libraryName = '@nutui/nutui';
+                if(!opts.sourceCode) opts.sourceCode = false;
                 const {style} = opts;
                 if(style) opts.style = style === 'scss'? 'scss': 'css';
-                
                 const {node} = path;
                 if(!node.source) return;
                 const {value} = node.source;
