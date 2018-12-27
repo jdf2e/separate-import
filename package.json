@@ -1,6 +1,6 @@
 {
   "name": "@nutui/babel-plugin-separate-import",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "按需构建nutui2.0的组件，减小打包体积",
   "main": "index.js",
   "author": "famanoder",
@@ -15,6 +15,6 @@
   "keywords": [
     "jdcfe",
     "nutui",
-    "import"   
+    "import"
   ]
 }
