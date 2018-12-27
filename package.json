@@ -1,7 +1,7 @@
 {
   "name": "@nutui/babel-plugin-separate-import",
-  "version": "0.1.1",
-  "description": "separate-import",
+  "version": "0.1.4",
+  "description": "按需构建nutui2.0的组件，减小打包体积",
   "main": "index.js",
   "author": "famanoder",
   "repository": {

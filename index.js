@@ -2,10 +2,16 @@ const {join} = require('path');
 const t = require('babel-types');
 
 const isLocaleExtra = curr => ~['locale', 'i18n'].indexOf(curr);
-const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex'].indexOf(curr);
+const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex', 'steps'].indexOf(curr);
 
+/**
+ * 生成新的specifiers
+ * @param {array} specifiers 
+ * @param {object} opts - babel plugin传入的参数
+ * @returns {array}
+ */
 function genImportDeclaration(specifiers = [], opts) {
-    const packagesPath = `${opts.libraryName}/${opts.libraryDirectory}/`;
+    const packagesPath = `${opts.libraryName}/dist/packages/`;
     return specifiers.reduce(function(newSpecifiers, curr) {
         const isLocale = isLocaleExtra(curr);
         const isExportFunc = isExportFuncExtra(curr);
@@ -33,7 +39,6 @@ module.exports = function() {
         visitor: {
             ImportDeclaration(path, {opts = {}}) {
                 if(!opts.libraryName) opts.libraryName = '@nutui/nutui2';
-                if(!opts.libraryDirectory) opts.libraryDirectory = 'dist/src/packages';
                 const {style} = opts;
                 if(style) opts.style = style === 'scss'? 'scss': 'css';
                 

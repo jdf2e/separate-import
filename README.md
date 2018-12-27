@@ -22,8 +22,7 @@ npm i -D @nutui/babel-plugin-separate-import
 {
   "plugins": [
     ["@nutui/babel-plugin-separate-import", {
-        "libraryName": "@nutui/nutui2",
-        "libraryDirectory": "dist/src/packages",
+        "libraryName": "@nutui/nutui"
         "style": "css"
     }]
   ]
@@ -35,7 +34,7 @@ npm i -D @nutui/babel-plugin-separate-import
 
 ```js
 import Vue from 'vue';
-import { Button, Icon } from '@nutui/nutui2';
+import { Button, Icon } from '@nutui/nutui';
 
 Vue.component(Button.name, Button);
 Vue.component(Icon.name, Icon);
@@ -46,12 +45,12 @@ Vue.component(Icon.name, Icon);
 ---
 
 ```js
-import { Button } from '@nutui/nutui2';
+import { Button } from '@nutui/nutui';
 ```
 当使用这种方式`import`组件时，将会被转换为：
 ```js
-import Button from '@nutui/nutui/dist/src/packages/button/button.vue';
-import '@nutui/nutui/dist/src/packages/button/button.css';
+import Button from '@nutui/nutui/dist/packages/button/button.vue';
+import '@nutui/nutui/dist/packages/button/button.css';
 ```
 
 * 如果`style`选项为`css`，则会加载相应组件的`css`；
