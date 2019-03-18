@@ -57,11 +57,12 @@ Vue.component(Icon.name, Icon);
 {
   "plugins": [
     ["@nutui/babel-plugin-separate-import", {
-      "source": true,
+      "sourceCode": true,
       "style": "css"
     }]
   ]
 }
+```
 
 ### AST转换
 
@@ -70,7 +71,9 @@ Vue.component(Icon.name, Icon);
 ```js
 import { Button } from '@nutui/nutui';
 ```
+
 当使用这种方式`import`组件时，将会被转换为：
+
 ```js
 import Button from '@nutui/nutui/dist/packages/button/button.js';
 // sourceCode 为 true 时

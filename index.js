@@ -58,8 +58,8 @@ module.exports = function() {
                 if(!opts.libraryName) opts.libraryName = '@nutui/nutui';
                 if(!opts.sourceCode) opts.sourceCode = false;
                 const {style} = opts;
-                if(style) opts.style = style === 'scss'? 'scss': 'css';
                 const {node} = path;
+                opts.style = style === 'scss'? 'scss': 'css';
                 if(!node.source) return;
                 const {value} = node.source;
                 const {specifiers} = node;
