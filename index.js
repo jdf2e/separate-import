@@ -1,6 +1,8 @@
 const {join} = require('path');
+const {existsSync} = require('fs');
 const t = require('babel-types');
 
+const filesStatCache = new Set();
 const isLocaleExtra = curr => ~['locale', 'i18n'].indexOf(curr);
 const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex', 'steps', 'skeleton'].indexOf(curr);
 
@@ -25,8 +27,18 @@ function genImportDeclaration(specifiers = [], opts) {
             ], t.stringLiteral(getTarget(_curr, packagesPath, sourceCode)))
         ]
         if(style && !isLocale) {
-            const cssTarget = `${packagesPath + _curr}/${_curr}`;
-            imports.push(t.importDeclaration([], t.stringLiteral(`${cssTarget}.${style}`)))
+            const cssTarget = `${packagesPath + _curr}/${_curr}.${style}`;
+            const cssFile = join(process.cwd(), 'node_modules', cssTarget);
+      
+            if(!filesStatCache.has(cssFile)) {
+                const hasFile = existsSync(cssFile);
+                if(hasFile) {
+                    filesStatCache.add(cssFile);
+                }
+            }
+            if(filesStatCache.has(cssFile)) {
+                imports.push(t.importDeclaration([], t.stringLiteral(cssTarget)));
+            }
         }
         return newSpecifiers.concat(imports);
     }, []);
