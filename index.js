@@ -13,7 +13,7 @@ const isExportFuncExtra = curr => ~['dialog', 'toast', 'flex', 'steps', 'skeleto
  * @returns {array}
  */
 function genImportDeclaration(specifiers = [], opts) {
-    const packagesPath = `@nutui/nutui/dist/packages/`;
+    const packagesPath = `${opts.libraryName}/${opts.libraryDirectory}/`;
     return specifiers.reduce(function(newSpecifiers, curr) {
         const _curr = curr.toLowerCase();
         const isLocale = isLocaleExtra(_curr);
@@ -68,10 +68,11 @@ module.exports = function() {
         visitor: {
             ImportDeclaration(path, {opts = {}}) {
                 if(!opts.libraryName) opts.libraryName = '@nutui/nutui';
+                if(!opts.libraryDirectory) opts.libraryDirectory = 'dist/packages';
                 if(!opts.sourceCode) opts.sourceCode = false;
                 const {style} = opts;
                 const {node} = path;
-                opts.style = style === 'scss'? 'scss': 'css';
+                opts.style = style ? (style === 'scss'? 'scss': 'css') : '';
                 if(!node.source) return;
                 const {value} = node.source;
                 const {specifiers} = node;
